@@ -32,7 +32,7 @@ function App() {
 
   return (
     <div className="min-h-screen w-full bg-app-black-1">
-      <div className="p-6 md:w-2/3 mx-auto">
+      <div className="p-6 md:w-1/2 mx-auto">
         <Header apiGet={apiGet} />
         <Dictionary data={data} />
       </div>
