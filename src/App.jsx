@@ -5,48 +5,43 @@ import Dictionary from "./components/Dictionary";
 
 function App() {
   const [data, setData] = useState([]);
-    const [theme, setTheme] = useState(null);
-  
-    useEffect(() => {
-      if(window.matchMedia('(prefers-color-scheme: dark)').matches){
-        setTheme('dark');
-      }
-      else {
-        setTheme('light');
-      }
-    }, [])
-  
-    useEffect(() => {
-      if (theme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
+  const [theme, setTheme] = useState(null);
 
-    }, [theme]);
-  
-    const handleThemeSwitch = () => {
-      setTheme(theme === "dark" ? "light" : "dark");
-    };
+  useEffect(() => {
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      setTheme("dark");
+    } else {
+      setTheme("light");
+    }
+  }, []);
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
+
+  const handleThemeSwitch = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   const apiGet = async (word) => {
-    fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error(`Failed to fetch data for `);
-        }
-      })
-      .then((json) => {
-        // Only proceed if the response was successful
+    try {
+      const response = await fetch(
+        `https://api.dictionaryapi.dev/api/v2/entries/en/${word}`
+      );
+      if (response.ok) {
+        const json = await response.json();
         setData(json);
-        console.log(data);
-      })
-      .catch((error) => {
-        // Handle the error silently
-        console.error(error);
-      });
+        console.log(word); // Log the current word
+      } else {
+        throw new Error(`Failed to fetch data for ${word}`);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
