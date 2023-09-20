@@ -1,18 +1,52 @@
-import React from "react";
+import { useState } from "react";
 
 const Dictionary = ({ data }) => {
+
+  
+
   if (!data || data.length === 0 || !data[0]?.word) {
     // If 'data' is not available or doesn't contain the expected structure, return null or handle the case accordingly.
     return null;
   }
+
+    // Define the audio URL from your API response  
+    // Create a state to track whether the audio is playing
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    // Find the first phonetics object with a non-empty audio URL
+    const phoneticWithAudio = data[0].phonetics.find((phonetic) => phonetic.audio);
+    
+    // Create an Audio object if a valid phonetic object with audio is found
+    const audio = phoneticWithAudio ? new Audio(phoneticWithAudio.audio) : null;
+    
+    // Function to handle the play button click
+    const handlePlayClick = () => {
+      if (audio) {
+        if (isPlaying) {
+          // If audio is already playing, pause it
+          audio.pause();
+        } else {
+          // If audio is not playing, play it
+          audio.play();
+        }
+    
+        // Toggle the isPlaying state
+        setIsPlaying(!isPlaying);
+      }
+    };
+    
+    // Rest of your component code
+    
+
   return (
     <>
       <div className="flex mt-6 justify-between items-center">
         <div>
-          <h1 className="font-bold text-3xl text-white">{data[0].word}</h1>
+          <h1 className="font-bold text-3xl text-app-black-3 dark:text-white">{data[0].word}</h1>
           <h5 className="text-lg text-app-purple">{data[0].phonetic}</h5>
         </div>
         <svg
+        onClick={handlePlayClick}
           xmlns="http://www.w3.org/2000/svg"
           width="48"
           height="48"
@@ -25,14 +59,14 @@ const Dictionary = ({ data }) => {
         </svg>
       </div>
       <div className="flex items-center mt-4">
-        <h5 className="text-white text-lg italic font-bold">noun</h5>
+        <h5 className="dark:text-white text-app-black-3 text-lg italic font-bold">noun</h5>
         <div className="bg-app-black-4 ml-4 h-[1px] w-full"></div>
       </div>
       <div className="mt-4">
         <h6 className="text-app-grey-1">Meaning</h6>
         <ul className="mt-4 marker:text-app-purple list-outside">
           {data[0].meanings[0].definitions.map((definition, index) => (
-            <li className="text-white" key={index}>
+            <li className="dark:text-white text-app-black-3 mt-6" key={index}>
               <div className="flex">
                 <span className="mr-6 text-app-purple">•</span>
                 {definition.definition}
@@ -57,7 +91,7 @@ const Dictionary = ({ data }) => {
         <h6 className="text-app-grey-1">Meaning</h6>
         <ul className="mt-4 marker:text-app-purple list-outside">
           {data[0].meanings[1].definitions.map((definition, index) => (
-            <li className="text-white" key={index}>
+            <li className="dark:text-white text-app-black-3" key={index}>
               <div className="flex">
                 <span className="mr-6 text-app-purple">•</span>
                 {definition.definition}
@@ -69,7 +103,7 @@ const Dictionary = ({ data }) => {
       <div>
         <div className="bg-app-black-4 h-[1px] w-full mt-9"></div>
         <h6 className="text-app-grey-1 text-sm underline mt-6">Source</h6>
-        <a href={data[0].sourceUrls} className="text-white mt-2 text-sm">
+        <a href={data[0].sourceUrls} className="dark:text-white text-app-black-3 mt-2 text-sm">
           {data[0].sourceUrls}
         </a>
       </div>

@@ -4,7 +4,7 @@ import "react-toggle/style.css";
 import "./Toggle.css";
 import SearchBar from "./SearchBar";
 
-const Header = ({ apiGet }) => {
+const Header = ({ apiGet, handleThemeSwitch }) => {
   const [dropDown, setDropDown] = useState(false);
   return (
     <>
@@ -32,7 +32,7 @@ const Header = ({ apiGet }) => {
             onClick={() => {
               setDropDown(!dropDown);
             }}
-            className="text-white"
+            className="text-black dark:text-white"
           >
             Sans Serif
           </p>
@@ -54,7 +54,7 @@ const Header = ({ apiGet }) => {
           </svg>
           <div className="w-[1px] h-[32px] bg-white"></div>
           <label className="switch">
-            <input type="checkbox" />
+            <input onClick={handleThemeSwitch} type="checkbox" />
             <span className="slider round"></span>
           </label>
           <svg

@@ -28,13 +28,13 @@ const SearchBar = ({ apiGet }) => {
       <form
         onFocus={toggleBorder}
         onBlur={toggleBorder}
-        className="w-full flex items-center justify-between mt-6 bg-app-black-2 h-[48px] rounded-2xl px-6"
+        className="w-full flex items-center justify-between mt-6 bg-app-grey-3 dark:bg-app-black-2 h-[48px] rounded-2xl px-6"
         style={divStyle}
         onSubmit={submitHandler}
       >
         <input
           placeholder="Search for any word..."
-          className="flex-1 text-white bg-app-black-2 focus:outline-none h-full"
+          className="flex-1 text-white bg-app-grey-3 dark:bg-app-black-2 focus:outline-none h-full"
           type="text"
           onChange={(e) => {
             setWord(e.target.value);
