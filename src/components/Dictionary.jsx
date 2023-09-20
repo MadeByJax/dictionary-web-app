@@ -26,18 +26,20 @@ const Dictionary = ({ data }) => {
           </h1>
           <h5 className="text-lg text-app-purple">{data[0].phonetic}</h5>
         </div>
-        <svg
-          onClick={handlePlayClick}
-          xmlns="http://www.w3.org/2000/svg"
-          width="48"
-          height="48"
-          viewBox="0 0 75 75"
-        >
-          <g fill="#A445ED" fill-rule="evenodd">
-            <circle cx="37.5" cy="37.5" r="37.5" opacity=".25" />
-            <path d="M29 27v21l21-10.5z" />
-          </g>
-        </svg>
+        {audio && (
+          <svg
+            onClick={handlePlayClick}
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 75 75"
+          >
+            <g fill="#A445ED" fill-rule="evenodd">
+              <circle cx="37.5" cy="37.5" r="37.5" opacity=".25" />
+              <path d="M29 27v21l21-10.5z" />
+            </g>
+          </svg>
+        )}
       </div>
       <div className="flex items-center mt-4">
         <h5 className="dark:text-white text-app-black-3 text-lg italic font-bold">
