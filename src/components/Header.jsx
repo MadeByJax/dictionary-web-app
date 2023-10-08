@@ -1,15 +1,52 @@
-import { useState } from "react";
+import { useState, useContext, useRef, useEffect } from "react";
 import Toggle from "react-toggle";
 import "react-toggle/style.css";
 import "./Toggle.css";
 import SearchBar from "./SearchBar";
+import { Context } from "../App";
 
 const Header = ({ apiGet, handleThemeSwitch }) => {
-  const [dropDown, setDropDown] = useState(false);
+  const [font, setFont, dropDown, setDropDown] = useContext(Context);
+  const [formattedFont, setFormattedFont] = useState("Sans Serif");
+  const dropdownRef = useRef(null);
+  const [submitError, setSubmitError] = useState("");
+
+  const handleLogoClick = () => {
+    apiGet("keyboard");
+    setSubmitError("");
+  };
+
+  const handleFont = (selectedFont) => {
+    setFont(selectedFont);
+
+    const formatted = selectedFont
+      .split("-")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+
+    setFormattedFont(formatted);
+    setDropDown(false);
+  };
+
+  const handleOutsideClick = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setDropDown(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleOutsideClick);
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
   return (
     <>
       <div className="flex justify-between items-center">
         <svg
+          className="cursor-pointer"
+          onClick={handleLogoClick}
           xmlns="http://www.w3.org/2000/svg"
           width="28"
           height="31"
@@ -32,11 +69,12 @@ const Header = ({ apiGet, handleThemeSwitch }) => {
             onClick={() => {
               setDropDown(!dropDown);
             }}
-            className="text-black dark:text-white"
+            className="cursor-pointer text-black dark:text-white"
           >
-            Sans Serif
+            {formattedFont}
           </p>
           <svg
+            className="cursor-pointer "
             onClick={() => {
               setDropDown(!dropDown);
             }}
@@ -74,14 +112,26 @@ const Header = ({ apiGet, handleThemeSwitch }) => {
             />
           </svg>
           {dropDown && (
-            <ul className="bg-app-black-2 shadow-custom text-white p-6 rounded-2xl w-[183px] right-[110px] top-[30px]  absolute">
-              <li className="font-bold hover:text-app-purple cursor-pointer">
+            <ul
+              ref={dropdownRef}
+              className="dark:bg-app-black-2 bg-white shadow-custom dark:text-white p-6 rounded-2xl w-[183px] right-[110px] top-[30px]  absolute"
+            >
+              <li
+                onClick={() => handleFont("sans-serif")}
+                className="font-bold hover:text-app-purple cursor-pointer"
+              >
                 Sans Serif
               </li>
-              <li className="font-bold hover:text-app-purple cursor-pointer">
+              <li
+                onClick={() => handleFont("Serif")}
+                className="font-bold hover:text-app-purple cursor-pointer"
+              >
                 Serif
               </li>
-              <li className="font-bold hover:text-app-purple cursor-pointer">
+              <li
+                onClick={() => handleFont("Mono")}
+                className="font-bold hover:text-app-purple cursor-pointer"
+              >
                 Mono
               </li>
             </ul>
@@ -89,7 +139,11 @@ const Header = ({ apiGet, handleThemeSwitch }) => {
         </div>
       </div>
 
-      <SearchBar apiGet={apiGet} />
+      <SearchBar
+        submitError={submitError}
+        setSubmitError={setSubmitError}
+        apiGet={apiGet}
+      />
     </>
   );
 };

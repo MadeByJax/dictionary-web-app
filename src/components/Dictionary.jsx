@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 const Dictionary = ({ data }) => {
   if (!data || data.length === 0 || !data[0]?.word) {
     return null;
@@ -21,13 +19,14 @@ const Dictionary = ({ data }) => {
     <>
       <div className="flex mt-6 justify-between items-center">
         <div>
-          <h1 className="font-bold text-3xl text-app-black-3 dark:text-white">
+          <h1 className="font-bold text-4xl text-app-black-3 dark:text-white">
             {data[0].word}
           </h1>
           <h5 className="text-lg text-app-purple">{data[0].phonetic}</h5>
         </div>
         {audio && (
           <svg
+            className="cursor-pointer"
             onClick={handlePlayClick}
             xmlns="http://www.w3.org/2000/svg"
             width="48"
@@ -59,7 +58,7 @@ const Dictionary = ({ data }) => {
             </li>
           ))}
         </ul>
-        <div className="flex gap-6 mt-6">
+        <div className="flex flex-wrap gap-6 mt-6">
           <p className="text-app-grey-1">Synonyms</p>
           {data[0].meanings[0].synonyms.map((synonym, index) => (
             <p className="text-app-purple" key={index}>
@@ -78,7 +77,7 @@ const Dictionary = ({ data }) => {
         <h6 className="text-app-grey-1">Meaning</h6>
         <ul className="mt-4 marker:text-app-purple list-outside">
           {data[0].meanings[0].definitions.map((definition, index) => (
-            <li className="dark:text-white text-app-black-3" key={index}>
+            <li className="dark:text-white text-app-black-3 mt-6" key={index}>
               <div className="flex">
                 <span className="mr-6 text-app-purple">•</span>
                 {definition.definition}
@@ -91,10 +90,12 @@ const Dictionary = ({ data }) => {
         <div className="bg-app-black-4 h-[1px] w-full mt-9"></div>
         <h6 className="text-app-grey-1 text-sm underline mt-6">Source</h6>
         <a
-          href={data[0].sourceUrls}
+          href={data[0].sourceUrls[0]}
           className="dark:text-white text-app-black-3 mt-2 text-sm"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          {data[0].sourceUrls}
+          {data[0].sourceUrls[0]}
         </a>
       </div>
     </>
